@@ -1,20 +1,19 @@
-
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
-import pickle
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from imblearn.metrics import classification_report_imbalanced
 
-# Title of the Streamlit application
-st.title("Liver Disease Prediction")
+# Judul Aplikasi
+st.title("Aplikasi Prediksi Penyakit Liver")
 
-# Sidebar for user input
-st.sidebar.header("Input Parameters")
-
+# Input Data
+st.sidebar.header("Input Parameter")
 def user_input_features():
-    age = st.sidebar.number_input("Age", 20, 100, 50)
-    gender = st.sidebar.selectbox("Gender", (0, 1))
+    age = st.sidebar.number_input("Umur", 20, 100, 50)
+    gender = st.sidebar.selectbox("Jenis Kelamin", (0, 1))
     totbil = st.sidebar.number_input("Total Bilirubin", 0.0, 100.0, 1.0)
     dirbil = st.sidebar.number_input("Direct Bilirubin", 0.0, 10.0, 0.5)
     alpho = st.sidebar.number_input("Alkaline Phosphotase", 50, 3000, 100)
@@ -22,7 +21,7 @@ def user_input_features():
     asparami = st.sidebar.number_input("Aspartate Aminotransferase", 0, 3000, 40)
     totalpro = st.sidebar.number_input("Total Proteins", 0.0, 10.0, 7.0)
     albumin = st.sidebar.number_input("Albumin", 0.0, 6.0, 3.0)
-    Agr = st.sidebar.number_input("Albumin and Globulin Ratio", 0.0, 3.0, 1.0)
+    agr = st.sidebar.number_input("Albumin dan Globulin Ratio", 0.0, 3.0, 1.0)
     
     data = {
         'Age': age,
@@ -32,47 +31,47 @@ def user_input_features():
         'Alkaline_Phosphotase': alpho,
         'Alamine_Aminotransferase': alamino,
         'Aspartate_Aminotransferase': asparami,
-        'Total_Protiens': totalpro,
+        'Total_Proteins': totalpro,
         'Albumin': albumin,
-        'Albumin_and_Globulin_Ratio': Agr
+        'Albumin_and_Globulin_Ratio': agr
     }
     features = pd.DataFrame(data, index=[0])
     return features
 
-input_df = user_input_features()
+df = user_input_features()
 
-# Display user input
-st.subheader('User Input Parameters')
-st.write(input_df)
+# Tampilkan input pengguna
+st.subheader('Parameter Input')
+st.write(df)
 
 # Load dataset
-data = pd.read_csv('/content/drive/MyDrive/ML 6/Data Pasien penyakit liver.csv')  # Ensure the dataset path is correct
+data = pd.read_csv('/content/drive/MyDrive/ML 6/Data Pasien penyakit liver.csv')  # Pastikan file dataset tersedia
 
 # Preprocessing
-X = data.drop(columns='Dataset')  # Replace 'Dataset' with the actual target column name
-y = data['Dataset']  # Replace 'Dataset' with the actual target column name
+X = data.drop(columns='Dataset')  # Ganti 'Dataset' dengan nama kolom target yang sesuai
+y = data['Dataset']  # Ganti 'Dataset' dengan nama kolom target yang sesuai
 
-# Standardize data
+# Standardisasi data
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
-input_df = scaler.transform(input_df)
+df = scaler.transform(df)
 
 # Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Initialize and train KNN model
+# Inisialisasi dan latih model KNN
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X_train, y_train)
 
-# Prediction
-prediction = knn.predict(input_df)
+# Prediksi
+prediction = knn.predict(df)
 
-# Display prediction
-st.subheader('Prediction')
-st.write('Liver Disease' if prediction[0] == 1 else 'No Liver Disease')
+# Tampilkan hasil prediksi
+st.subheader('Hasil Prediksi')
+st.write('Penyakit Liver' if prediction[0] == 1 else 'Tidak Ada Penyakit Liver')
 
-# Evaluate model
-st.subheader('Model Evaluation')
+# Evaluasi model
+st.subheader('Evaluasi Model')
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y_test, knn.predict(X_test))
