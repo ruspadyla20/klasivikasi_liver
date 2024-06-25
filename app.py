@@ -60,6 +60,35 @@ if uploaded_file is not None:
     if 'Dataset' in data.columns:
         X = data.drop(columns='Dataset')  # Ganti 'Dataset' dengan nama kolom target yang sesuai
         y = data['Dataset']  # Ganti 'Dataset' dengan nama kolom target yang sesuai
+        import streamlit as st
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+# Upload file CSV
+uploaded_file = st.file_uploader("Upload file CSV", type="csv")
+if uploaded_file is not None:
+    data = pd.read_csv(uploaded_file)
+    st.write(data)
+    
+    # Menampilkan nama-nama kolom untuk verifikasi
+    st.write("Kolom dalam dataset:", data.columns)
+
+    # Memastikan kolom target yang benar digunakan
+    if 'Dataset' in data.columns:
+        X = data.drop(columns='Dataset')  # Ganti 'Dataset' dengan nama kolom target yang sesuai
+        y = data['Dataset']  # Ganti 'Dataset' dengan nama kolom target yang sesuai
+        
+        # Inisialisasi dan transformasi menggunakan scaler
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+
+        st.write("Preprocessing selesai. Data siap digunakan.")
+    else:
+        st.error("Kolom 'Dataset' tidak ditemukan dalam dataset. Mohon periksa nama kolom.")
+else:
+    st.error("Mohon upload file CSV.")
+
+        
         st.write("Preprocessing selesai. Data siap digunakan.")
     else:
         st.error("Kolom 'Dataset' tidak ditemukan dalam dataset. Mohon periksa nama kolom.")
