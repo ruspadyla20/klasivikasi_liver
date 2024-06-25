@@ -45,7 +45,7 @@ st.subheader('Parameter Input')
 st.write(df)
 
 # Load dataset
-data = pd.read_csv('/content/drive/MyDrive/ML 6/Data Pasien penyakit liver.csv')  # Pastikan file dataset tersedia
+data = pd.read_csv('/content/drive/MyDrive/Data Pasien penyakit liver.csv') # Pastikan file dataset tersedia
 
 # Preprocessing
 X = data.drop(columns='Dataset')  # Ganti 'Dataset' dengan nama kolom target yang sesuai
