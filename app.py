@@ -75,11 +75,13 @@ st.subheader('Evaluasi Model')
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y_test, knn.predict(X_test))
-st.write("Confusion Matrix:", conf_matrix)
+st.write("Confusion Matrix:")
+st.write(conf_matrix)
 
 # Classification Report
 class_report = classification_report_imbalanced(y_test, knn.predict(X_test))
-st.write("Classification Report:", class_report)
+st.write("Classification Report:")
+st.write(class_report)
 
 # Accuracy Score
 accuracy = accuracy_score(y_test, knn.predict(X_test))
