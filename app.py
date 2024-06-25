@@ -1,9 +1,10 @@
 import streamlit as st
-import joblib
+import pickle
 import numpy as np
 
 # Load the trained model
-model = joblib.load('klasifikasi_liver.pkl')
+with open('klasifikasi_liver.pkl', 'rb')
+model = pickle.load(file)
 
 # Define the prediction function
 def predict_species(Age, Gender, Total_Bilirubin, Direct_Bilirubin,	Alkaline_Phosphotase,	Alamine_Aminotransferase,	Aspartate_Aminotransferase,	Total_Protiens,	Albumin,	Albumin_and_Globulin_Ratio):
