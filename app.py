@@ -1,44 +1,77 @@
-import streamlit as st
+%%writefile app.py
 import pickle
-import numpy as np
+import streamlit as st
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
 
-# Load the trained model
-with open('klasifikasi_liver.pkl', 'rb') as file:
-    model = pickle.load(file)
+# Judul Aplikasi
+st.title("Aplikasi Prediksi Penyakit Jantung")
 
-# Define the prediction function
-def predict_species(Age, Gender, Total_Bilirubin, Direct_Bilirubin,	Alkaline_Phosphotase,	Alamine_Aminotransferase,	Aspartate_Aminotransferase,	Total_Protiens,	Albumin,	Albumin_and_Globulin_Ratio):
-    # Create numpy array from user input
-    input_data = np.array([[Age, Gender, Total_Bilirubin, Direct_Bilirubin,	Alkaline_Phosphotase,	Alamine_Aminotransferase,	Aspartate_Aminotransferase,	Total_Protiens,	Albumin,	Albumin_and_Globulin_Ratio]])
-
-    # Perform prediction using the loaded model
-    prediction = model.predict(input_data)
-
-    # Return the predicted species
-    return prediction[0]
-
-# Streamlit app
-def main():
-    # Set title and description
-    st.title('Klasifikasi Penyakit Liver')
+# Input Data
+st.sidebar.header("Input Parameter")
+def user_input_features():
+    age = st.sidebar.number_input("Age", 20, 100, 50)
+    sex = st.sidebar.selectbox("Sex", (0, 1))
+    cp = st.sidebar.selectbox("Chest Pain Type (0-3)", (0, 1, 2, 3))
+    trestbps = st.sidebar.number_input("Resting Blood Pressure", 80, 200, 120)
+    chol = st.sidebar.number_input("Serum Cholestoral (mg/dl)", 100, 400, 200)
+    fbs = st.sidebar.selectbox("Fasting Blood Sugar > 120 mg/dl", (0, 1))
+    restecg = st.sidebar.selectbox("Resting Electrocardiographic Results (0-2)", (0, 1, 2))
+    thalach = st.sidebar.number_input("Maximum Heart Rate Achieved", 70, 210, 150)
+    exang = st.sidebar.selectbox("Exercise Induced Angina", (0, 1))
+    oldpeak = st.sidebar.number_input("ST Depression Induced by Exercise", 0.0, 6.0, 1.0)
+    slope = st.sidebar.selectbox("Slope of the Peak Exercise ST Segment", (0, 1, 2))
+    ca = st.sidebar.selectbox("Number of Major Vessels (0-4)", (0, 1, 2, 3, 4))
+    thal = st.sidebar.selectbox("Thalassemia (0-3)", (0, 1, 2, 3))
     
+    data = {
+        'age': age,
+        'sex': sex,
+        'cp': cp,
+        'trestbps': trestbps,
+        'chol': chol,
+        'fbs': fbs,
+        'restecg': restecg,
+        'thalach': thalach,
+        'exang': exang,
+        'oldpeak': oldpeak,
+        'slope': slope,
+        'ca': ca,
+        'thal': thal
+    }
+    features = pd.DataFrame(data, index=[0])
+    return features
 
-    # Input fields for user to enter values
-    Age = st.number_input('Age')
-    Gender = st.number_input('Gender')
-    Total_Bilirubin = st.number_input('Total_Bilirubin')
-    Direct_Bilirubin = st.number_input('Direct_Bilirubin')
-    Alkaline_Phosphotase = st.number_input('Alkaline_Phosphotase')
-    Alamine_Aminotransferase = st.number_input('Alamine_Aminotransferase')
-    Aspartate_Aminotransferase = st.number_input('Aspartate_Aminotransferase')
-    Total_Protiens = st.number_input('Total_Protiens')
-    Albumin = st.number_input('Albumin')
-    Albumin_and_Globulin_Ratio = st.number_input('Albumin_and_Globulin_Ratio')
+df = user_input_features()
 
-    # When 'Predict' button is clicked, make prediction and display result
-    if st.button('Predict'):
-        prediction = predict_species(Age, Gender, Total_Bilirubin, Direct_Bilirubin,	Alkaline_Phosphotase,	Alamine_Aminotransferase,	Aspartate_Aminotransferase,	Total_Protiens,	Albumin,	Albumin_and_Globulin_Ratio)
-        st.write(f'Predicted Species: {prediction}')
+# Tampilkan input pengguna
+st.subheader('Input Parameters')
+st.write(df)
 
-if __name__ == '__main__':
-    main()
+# Load dataset
+heart_data = pd.read_csv('heart.csv')  # Pastikan file dataset tersedia
+
+# Preprocessing
+X = heart_data.drop(columns='target')
+y = heart_data['target']
+
+# Standardisasi data
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+df = scaler.transform(df)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Inisialisasi dan latih model KNN
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+
+# Prediksi
+prediction = knn.predict(df)
+
+# Tampilkan hasil prediksi
+st.subheader('Hasil Prediksi')
+st.write('Penyakit Jantung' if prediction[0] == 1 else 'Tidak Ada Penyakit Jantung')
