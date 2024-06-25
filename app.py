@@ -64,6 +64,10 @@ if uploaded_file is not None:
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+import streamlit as st
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
 # Upload file CSV
 uploaded_file = st.file_uploader("Upload file CSV", type="csv")
 if uploaded_file is not None:
