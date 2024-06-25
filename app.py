@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 
 # Load the trained model
-with open('klasifikasi_liver.pkl', 'rb')
+with open('klasifikasi_liver.pkl', 'rb') as file :
 model = pickle.load(file)
 
 # Define the prediction function
