@@ -46,13 +46,13 @@ st.write(df)
 
 # Load dataset
 # data = pd.read_csv('data/Data Pasien penyakit liver.csv') # Pastikan file dataset tersedia
+#Upload file CSV
 uploaded_file = st.file_uploader("Upload file CSV", type="csv")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     st.write(data)
 
     st.write("Kolom dalam dataset:", data.columns)
-# Preprocessing
 if 'Dataset' in data.columns:
 X = data.drop(columns='Dataset')  # Ganti 'Dataset' dengan nama kolom target yang sesuai
 y = data['Dataset']  # Ganti 'Dataset' dengan nama kolom target yang sesuai
