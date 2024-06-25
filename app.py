@@ -88,18 +88,6 @@ if uploaded_file is not None:
 else:
     st.error("Mohon upload file CSV.")
 
-        
-        st.write("Preprocessing selesai. Data siap digunakan.")
-    else:
-        st.error("Kolom 'Dataset' tidak ditemukan dalam dataset. Mohon periksa nama kolom.")
-else:
-    st.error("Mohon upload file CSV.")
-    
-# Standardisasi data
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-df = scaler.transform(df)
-
 # Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
