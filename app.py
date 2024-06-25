@@ -46,7 +46,8 @@ st.write(df)
 
 # Load dataset
 # data = pd.read_csv('data/Data Pasien penyakit liver.csv') # Pastikan file dataset tersedia
-#Upload file CSV
+
+# Upload file CSV
 uploaded_file = st.file_uploader("Upload file CSV", type="csv")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
@@ -55,11 +56,11 @@ if uploaded_file is not None:
     # Menampilkan nama-nama kolom untuk verifikasi
     st.write("Kolom dalam dataset:", data.columns)
 
-# Memastikan kolom target yang benar digunakan
-if 'Dataset' in data.columns:
-X = data.drop(columns='Dataset')  # Ganti 'Dataset' dengan nama kolom target yang sesuai
-y = data['Dataset']  # Ganti 'Dataset' dengan nama kolom target yang sesuai
-st.write("Preprocessing selesai. Data siap digunakan.")
+    # Memastikan kolom target yang benar digunakan
+    if 'Dataset' in data.columns:
+        X = data.drop(columns='Dataset')  # Ganti 'Dataset' dengan nama kolom target yang sesuai
+        y = data['Dataset']  # Ganti 'Dataset' dengan nama kolom target yang sesuai
+        st.write("Preprocessing selesai. Data siap digunakan.")
     else:
         st.error("Kolom 'Dataset' tidak ditemukan dalam dataset. Mohon periksa nama kolom.")
 else:
