@@ -43,7 +43,7 @@ st.subheader('Input Parameters')
 st.write(df)
 
 # Load dataset
-liver_data = pd.read_csv('indian_liver_patient.csv')  # Ganti dengan nama file dataset penyakit liver Anda
+liver_data = pd.read_csv('Data Pasien penyakit liver.csv')  # Ganti dengan nama file dataset penyakit liver Anda
 
 # Preprocessing
 X = liver_data.drop(columns='Dataset')
