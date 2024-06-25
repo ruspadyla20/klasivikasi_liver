@@ -3,8 +3,8 @@ import pickle
 import numpy as np
 
 # Load the trained model
-with open('klasifikasi_liver.pkl', 'rb') as file :
-model = pickle.load(file)
+with open('klasifikasi_liver.pkl', 'rb') as file:
+    model = pickle.load(file)
 
 # Define the prediction function
 def predict_species(Age, Gender, Total_Bilirubin, Direct_Bilirubin,	Alkaline_Phosphotase,	Alamine_Aminotransferase,	Aspartate_Aminotransferase,	Total_Protiens,	Albumin,	Albumin_and_Globulin_Ratio):
