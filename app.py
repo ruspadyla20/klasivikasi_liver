@@ -28,39 +28,39 @@ if uploaded_file is not None:
         X = scaler.fit_transform(X)
 
         st.write("Preprocessing selesai. Data siap digunakan.")
+
+        # Train-test split (jika data sudah tersedia dan 'Dataset' ada dalam kolom)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        # Inisialisasi dan latih model KNN
+        knn = KNeighborsClassifier(n_neighbors=5)
+        knn.fit(X_train, y_train)
+
+        # Prediksi (misalnya menggunakan data input pengguna)
+        prediction = knn.predict(X_test)
+
+        # Tampilkan hasil prediksi
+        st.subheader('Hasil Prediksi')
+        st.write('Penyakit Liver' if prediction[0] == 1 else 'Tidak Ada Penyakit Liver')
+
+        # Evaluasi model
+        st.subheader('Evaluasi Model')
+
+        # Confusion Matrix
+        conf_matrix = confusion_matrix(y_test, knn.predict(X_test))
+        st.write("Confusion Matrix:")
+        st.write(conf_matrix)
+
+        # Classification Report
+        class_report = classification_report_imbalanced(y_test, knn.predict(X_test))
+        st.write("Classification Report:")
+        st.write(class_report)
+
+        # Accuracy Score
+        accuracy = accuracy_score(y_test, knn.predict(X_test))
+        st.write(f"Accuracy Score: {accuracy}")
+
     else:
         st.error("Kolom 'Dataset' tidak ditemukan dalam dataset. Mohon periksa nama kolom.")
 else:
     st.error("Mohon upload file CSV.")
-
-# Train-test split (jika data sudah tersedia dan 'Dataset' ada dalam kolom)
-if 'Dataset' in data.columns:
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Inisialisasi dan latih model KNN
-    knn = KNeighborsClassifier(n_neighbors=5)
-    knn.fit(X_train, y_train)
-
-    # Prediksi (misalnya menggunakan data input pengguna)
-    prediction = knn.predict(X_test)
-
-    # Tampilkan hasil prediksi
-    st.subheader('Hasil Prediksi')
-    st.write('Penyakit Liver' if prediction[0] == 1 else 'Tidak Ada Penyakit Liver')
-
-    # Evaluasi model
-    st.subheader('Evaluasi Model')
-
-    # Confusion Matrix
-    conf_matrix = confusion_matrix(y_test, knn.predict(X_test))
-    st.write("Confusion Matrix:")
-    st.write(conf_matrix)
-
-    # Classification Report
-    class_report = classification_report_imbalanced(y_test, knn.predict(X_test))
-    st.write("Classification Report:")
-    st.write(class_report)
-
-    # Accuracy Score
-    accuracy = accuracy_score(y_test, knn.predict(X_test))
-    st.write(f"Accuracy Score: {accuracy}")
