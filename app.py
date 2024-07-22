@@ -10,7 +10,7 @@ st.title("Aplikasi Prediksi Penyakit Liver")
 # Input Data
 st.sidebar.header("Input Parameter")
 def user_input_features():
-    Age = st.sidebar.number_input("Age", 20, 100, 50)
+    Age = st.sidebar.number_input("Age 20-100", 20, 100, 50)
     Gender = st.sidebar.selectbox("Gender (0 = Female, 1 = Male)", (0, 1))
     Total_Bilirubin = st.sidebar.number_input("Total Bilirubin", 0.1, 8.0, 1.0)
     Direct_Bilirubin = st.sidebar.number_input("Direct Bilirubin", 0.1, 8.0, 0.5)
